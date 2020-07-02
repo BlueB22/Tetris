@@ -6,49 +6,52 @@ package org.psnbtech;
  * @author Brendan Jones
  *
  */
+
+package Hallo;
+
 public class Clock {
 	
 	/**
 	 * The number of milliseconds that make up one cycle.
 	 */
-	private float millisPerCycle;
+	private float MillisproZyklus;
 	
 	/**
 	 * The last time that the clock was updated (used for calculating the
 	 * delta time).
 	 */
-	private long lastUpdate;
+	private long letztesUpdate;
 	
 	/**
 	 * The number of cycles that have elapsed and have not yet been polled.
 	 */
-	private int elapsedCycles;
+	private int verstricheneZyklen;
 	
 	/**
 	 * The amount of excess time towards the next elapsed cycle.
 	 */
-	private float excessCycles;
+	private float überschüssigeZyklen;
 	
 	/**
 	 * Whether or not the clock is paused.
 	 */
-	private boolean isPaused;
+	private boolean istangehalten;
 	
 	/**
 	 * Creates a new clock and sets it's cycles-per-second.
 	 * @param cyclesPerSecond The number of cycles that elapse per second.
 	 */
-	public Clock(float cyclesPerSecond) {
-		setCyclesPerSecond(cyclesPerSecond);
-		reset();
+	public Clock(float ZyklenproSekunde) {
+		setZyklenproSekunde(ZyklenproSekunde);
+		zurücksetzen();
 	}
 	
 	/**
 	 * Sets the number of cycles that elapse per second.
 	 * @param cyclesPerSecond The number of cycles per second.
 	 */
-	public void setCyclesPerSecond(float cyclesPerSecond) {
-		this.millisPerCycle = (1.0f / cyclesPerSecond) * 1000;
+	public void setZyklenproSekunde(float ZyklenproSekunde) {
+		this.MillisproZyklus = (1.0f / ZyklenproSekunde) * 1000;
 	}
 	
 	/**
@@ -56,11 +59,11 @@ public class Clock {
 	 * to 0, the last update time will be reset to the current time, and the
 	 * paused flag will be set to false.
 	 */
-	public void reset() {
-		this.elapsedCycles = 0;
-		this.excessCycles = 0.0f;
-		this.lastUpdate = getCurrentTime();
-		this.isPaused = false;
+	public void zurücksetzen() {
+		this.verstricheneZyklen = 0;
+		this.überschüssigeZyklen = 0.0f;
+		this.letztesUpdate = getaktuelleZeit();
+		this.istangehalten = false;
 	}
 	
 	/**
@@ -71,17 +74,17 @@ public class Clock {
 	 */
 	public void update() {
 		//Get the current time and calculate the delta time.
-		long currUpdate = getCurrentTime();
-		float delta = (float)(currUpdate - lastUpdate) + excessCycles;
+		long aktuellesUpdate = getaktuelleZeit();
+		float delta = (float)(aktuellesUpdate - letztesUpdate) +  überschüssigeZyklen;
 		
 		//Update the number of elapsed and excess ticks if we're not paused.
-		if(!isPaused) {
-			this.elapsedCycles += (int)Math.floor(delta / millisPerCycle);
-			this.excessCycles = delta % millisPerCycle;
+		if(!istangehalten) {
+			this.verstricheneZyklen += (int)Math.floor(delta / MillisproZyklus);
+			this.überschüssigeZyklen = delta % MillisproZyklus;
 		}
 		
 		//Set the last update time for the next update cycle.
-		this.lastUpdate = currUpdate;
+		this.letztesUpdate = aktuellesUpdate;
 	}
 	
 	/**
@@ -90,16 +93,16 @@ public class Clock {
 	 * still be called every frame to prevent issues.
 	 * @param paused Whether or not to pause this clock.
 	 */
-	public void setPaused(boolean paused) {
-		this.isPaused = paused;
+	public void setPausiert(boolean istangehalten) {
+		this.istangehalten = istangehalten;
 	}
 	
 	/**
 	 * Checks to see if the clock is currently paused.
 	 * @return Whether or not this clock is paused.
 	 */
-	public boolean isPaused() {
-		return isPaused;
+	public boolean istangehalten() {
+		return istangehalten;
 	}
 	
 	/**
@@ -108,9 +111,9 @@ public class Clock {
 	 * @return Whether or not a cycle has elapsed.
 	 * @see peekElapsedCycle
 	 */
-	public boolean hasElapsedCycle() {
-		if(elapsedCycles > 0) {
-			this.elapsedCycles--;
+	public boolean verstricheneZyklenElapsedCycle() {
+		if(verstricheneZyklen > 0) {
+			this.verstricheneZyklen--;
 			return true;
 		}
 		return false;
@@ -123,8 +126,8 @@ public class Clock {
 	 * @return Whether or not a cycle has elapsed.
 	 * @see hasElapsedCycle
 	 */
-	public boolean peekElapsedCycle() {
-		return (elapsedCycles > 0);
+	public boolean peekverstricheneZyklen() {
+		return (verstricheneZyklen > 0);
 	}
 	
 	/**
@@ -134,8 +137,9 @@ public class Clock {
 	 * {@code System.nanoTime()}.
 	 * @return The current time in milliseconds.
 	 */
-	private static final long getCurrentTime() {
+	private static final long getaktuelleZeit() {
 		return (System.nanoTime() / 1000000L);
 	}
 
 }
+
